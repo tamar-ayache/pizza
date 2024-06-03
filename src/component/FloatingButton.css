@@ -1,0 +1,33 @@
+/* FloatingButton.css */
+.floating-button {
+    position: fixed;
+    bottom: 40px;
+    left: 30px;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 50%; /* הופך את הכפתור לעגול */
+    width: 60px; /* הגדר רוחב */
+    height: 60px; /* הגדר גובה */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff; /* צבע הרקע של הכפתור */
+}
+
+.floating-button button {
+    border-radius: 50%; /* הופך את הכפתור הפנימי לעגול */
+    width: 100%; /* הכפתור הפנימי ימלא את כל המעטפת */
+    height: 100%; /* הכפתור הפנימי ימלא את כל המעטפת */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background-color: transparent; /* רקע שקוף */
+    border: none; /* ללא מסגרת */
+    color: white; /* צבע הטקסט */
+}
+
+.floating-button button img {
+    width: 30px; /* גודל התמונה */
+    height: 30px; /* גודל התמונה */
+}
