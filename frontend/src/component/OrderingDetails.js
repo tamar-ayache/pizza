@@ -62,7 +62,24 @@ function OrderingDetails({}) {
         };
 
         addToCart(orderDetails);
+
+        fetch('/api/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderDetails),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // אפשר להוסיף כאן קוד לטיפול בתגובה של השרת
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         console.log(JSON.stringify(orderDetails, null, 2));
+
         // You can send the orderDetails JSON to a server or save it as needed
     };
 

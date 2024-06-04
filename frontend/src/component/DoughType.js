@@ -1,18 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input } from 'reactstrap';
 
-const doughTypes = [
-    "Classic Dough",
-    "Whole Wheat Dough",
-    "Gluten-Free Dough",
-    "Sourdough",
-    "Thin Crust Dough",
-    "Thick Crust Dough",
-    "Stuffed Crust Dough"
-];
-
-function DoughType({choose}) {
+function DoughType({ choose }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [doughTypes, setDoughTypes] = useState([]);
     const [selectedDough, setSelectedDough] = useState('');
 
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
@@ -21,6 +12,20 @@ function DoughType({choose}) {
         setSelectedDough(dough);
         choose(dough);
     };
+
+    useEffect(() => {
+        const fetchDoughTypes = async () => {
+            try {
+                const response = await fetch('/api/doughs');
+                const data = await response.json();
+                setDoughTypes(data);
+            } catch (error) {
+                console.error('Error fetching dough types:', error);
+            }
+        };
+
+        fetchDoughTypes();
+    }, []);
 
     return (
         <InputGroup>

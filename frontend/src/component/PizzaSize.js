@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input } from 'reactstrap';
-
-const sizes = [
-    "small",
-    "mid",
-    "big",
-];
 
 function PizzaSize({ choose }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedSize, setSelectedSize] = useState('');
+    const [sizes, setSizes] = useState([]);
+
+    useEffect(() => {
+        fetch('/api/sizes') // קריאה לשרת לקבלת רשימת הגדלים
+            .then(response => response.json())
+            .then(data => setSizes(data))
+            .catch(error => console.error('Error fetching sizes:', error));
+    }, []);
 
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
 

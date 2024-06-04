@@ -13,7 +13,7 @@ function PizzaMenu() {
     const [size, setSize] = useState('');
     const [toppings, setToppings] = useState([]);
     const navigate = useNavigate();
-
+    const [urlToppings, setUrl] = useState('/api/toppings');
     const handleDoughType = (dough) => {
         setDough(dough);
     };
@@ -59,7 +59,7 @@ function PizzaMenu() {
                 </Row>
                 <Row>
                     <Col md="6">
-                        <ToppingsSelector choose={handleToppings} />
+                        <ToppingsSelector url={urlToppings} choose={handleToppings} />
                     </Col>
                 </Row>
                 <Row>

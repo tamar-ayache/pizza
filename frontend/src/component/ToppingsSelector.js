@@ -1,37 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input, Button } from 'reactstrap';
 
-const toppings = [
-    "Olives",
-    "Mushrooms",
-    "Mozzarella",
-    "Corn",
-    "Pineapple",
-    "Tomatoes",
-    "Jalapeno"
-];
-
-function ToppingsSelector({ choose }) {
+function ToppingsSelector({ url, choose }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedTopping, setSelectedTopping] = useState('');
     const [toppingsList, setToppingsList] = useState([]);
+    const [selectedToppings, setSelectedToppings] = useState([]);
 
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
 
     const handleSelectTopping = (topping) => {
         setSelectedTopping(topping);
-        if (!toppingsList.includes(topping)) {
-            const newToppingsList = [...toppingsList, topping];
-            setToppingsList(newToppingsList);
-            choose(newToppingsList);
+        addSelectedTopping(topping);
+    };
+
+    const addSelectedTopping = (topping) => {
+        if (!selectedToppings.includes(topping)) {
+            const newSelectedToppings = [...selectedToppings, topping];
+            setSelectedToppings(newSelectedToppings);
+            choose(newSelectedToppings);
         }
     };
 
-    const removeTopping = (toppingToRemove) => {
-        const newToppingsList = toppingsList.filter(topping => topping !== toppingToRemove);
-        setToppingsList(newToppingsList);
-        choose(newToppingsList);
+    const removeTopping = (id) => {
+        const newSelectedToppings = selectedToppings.filter((topping, index) => index !== id);
+        setSelectedToppings(newSelectedToppings);
+        choose(newSelectedToppings);
     };
+
+    const getTopping = async () => {
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            const data = await response.json();
+            setToppingsList(data);
+        } catch (error) {
+            console.error("Error fetching toppings:", error);
+        }
+    };
+
+    useEffect(() => {
+        getTopping();
+    }, []);
 
     return (
         <>
@@ -43,7 +57,7 @@ function ToppingsSelector({ choose }) {
                         Select
                     </DropdownToggle>
                     <DropdownMenu>
-                        {toppings.map((topping, index) => (
+                        {toppingsList.map((topping, index) => (
                             <DropdownItem key={index} onClick={() => handleSelectTopping(topping)}>
                                 {topping}
                             </DropdownItem>
@@ -52,9 +66,9 @@ function ToppingsSelector({ choose }) {
                 </Dropdown>
             </InputGroup>
             <div>
-                {toppingsList.map((topping, index) => (
+                {selectedToppings.map((topping, index) => (
                     <div key={index}>
-                        {topping} <Button close onClick={() => removeTopping(topping)} />
+                        {topping} <Button close onClick={() => removeTopping(index)} />
                     </div>
                 ))}
             </div>

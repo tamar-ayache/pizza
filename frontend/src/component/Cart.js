@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {GlobalContext} from './GlobalContext';
 import {Button, Card, CardBody, CardText, CardTitle} from "reactstrap";
 import {useNavigate} from "react-router-dom";
@@ -6,11 +6,25 @@ import {useNavigate} from "react-router-dom";
 const Cart = () => {
     const {cartItems, resetCart, removeFromCart} = useContext(GlobalContext);
     const navigate = useNavigate();
-
+    const [price, setPrice] = useState(0);
     const handleRemoveItem = (index) => {
+
         removeFromCart(index);
+        updatePrice(); // קריאה לעדכון המחיר לאחר הסרת פריט
+
+
+    };
+    const updatePrice = () => {
+        let totalPrice = 0;
+        cartItems.forEach(item => {
+            totalPrice += 40 + item.toppings.length * 3;
+        });
+        setPrice(totalPrice);
     };
 
+    useEffect(() => {
+        updatePrice()
+    }, [price]);
     return (
         <>
             <h2>Cart</h2>
@@ -19,7 +33,7 @@ const Cart = () => {
             ) : (
                 <ul>
                     {cartItems.map((item, index) => (
-                        <Card className="mb-3" style={{ backgroundColor: "#ADD8E6" }}>
+                        <Card className="mb-3" style={{backgroundColor: "#ADD8E6"}}>
                             <CardBody>
                                 <CardTitle tag="h5">Pizza Details</CardTitle>
                                 <CardText>
@@ -28,19 +42,18 @@ const Cart = () => {
                                     <p className="text-muted">Toppings: {item.toppings && item.toppings.length > 0
                                         ? item.toppings.join(', ')
                                         : 'No toppings selected'}</p>
+                                    <p>Price: {40 + item.toppings.length * 3}</p>
                                 </CardText>
                                 <Button color="danger" onClick={() => removeFromCart(index)}>
                                     Delete
                                 </Button>
                             </CardBody>
                         </Card>
-
-
-
-
                     ))}
                 </ul>
             )}
+            <p>total price {price}</p>
+
             <Button color="danger" onClick={resetCart}>
                 Delete All
             </Button>
