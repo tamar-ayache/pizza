@@ -10,7 +10,8 @@ import OrderingDetails from "./OrderingDetails";
 import FloatingCartButton from "./FloatingCartButton";
 import {GlobalProvider} from "./GlobalContext";
 import Cart from "./Cart";
-
+import OrderDetailsForm from "./OrderDetailsForm";
+// import OrderDetails from './OrderDetails';
 function Support() {
     const handleCartClick = () => {
         alert("Cart button clicked!");
@@ -29,6 +30,8 @@ function Support() {
                     <Route path="/home/PizzaMenu" element={<PizzaMenu/>}/>
                     <Route path="/home/PizzaMenu/OrderingDetails" element={<OrderingDetails/>}/>
                     <Route path="/home/cart" element={<Cart/>}/>
+                    {/*<Route path="/order" element={<OrderingDetails />} />*/}
+                    <Route path="/orderform/:orderId" element={<OrderDetailsForm urlToppings={'/api/toppings'}/>} />
                 </Routes>
             </GlobalProvider>
         </BrowserRouter>

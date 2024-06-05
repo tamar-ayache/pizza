@@ -4,8 +4,11 @@ import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reac
 import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { GlobalContext } from './GlobalContext';
+import { useNavigate } from 'react-router-dom';
+
 
 function OrderingDetails({}) {
+    const navigate = useNavigate(); // השימוש ב-hook של useNavigate
     const location = useLocation();
     const { cartItems } = location.state || {};
     const [firstName, setFirstName] = useState('');
@@ -73,13 +76,13 @@ function OrderingDetails({}) {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                // אפשר להוסיף כאן קוד לטיפול בתגובה של השרת
+                // אם הבקשה הצליחה, העבר את המשתמש לדף ההזמנה עם ה-id של ההזמנה החדשה
+                navigate(`/orderform/${data.orderId}`); // השימוש ב-navigate כאן
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         console.log(JSON.stringify(orderDetails, null, 2));
-
         // You can send the orderDetails JSON to a server or save it as needed
     };
 

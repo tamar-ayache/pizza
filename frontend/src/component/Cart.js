@@ -10,14 +10,14 @@ const Cart = () => {
     const handleRemoveItem = (index) => {
 
         removeFromCart(index);
-        updatePrice(); // קריאה לעדכון המחיר לאחר הסרת פריט
-
+        updatePrice();
 
     };
+
     const updatePrice = () => {
         let totalPrice = 0;
         cartItems.forEach(item => {
-            totalPrice += 40 + item.toppings.length * 3;
+            // totalPrice += 40 + item.toppings.length * 3;
         });
         setPrice(totalPrice);
     };
@@ -33,7 +33,7 @@ const Cart = () => {
             ) : (
                 <ul>
                     {cartItems.map((item, index) => (
-                        <Card className="mb-3" style={{backgroundColor: "#ADD8E6"}}>
+                        <Card key={index} className="mb-3" style={{ backgroundColor: "#ADD8E6" }}>
                             <CardBody>
                                 <CardTitle tag="h5">Pizza Details</CardTitle>
                                 <CardText>
@@ -42,7 +42,6 @@ const Cart = () => {
                                     <p className="text-muted">Toppings: {item.toppings && item.toppings.length > 0
                                         ? item.toppings.join(', ')
                                         : 'No toppings selected'}</p>
-                                    <p>Price: {40 + item.toppings.length * 3}</p>
                                 </CardText>
                                 <Button color="danger" onClick={() => removeFromCart(index)}>
                                     Delete
