@@ -14,6 +14,7 @@ function PizzaMenu() {
     const [toppings, setToppings] = useState([]);
     const navigate = useNavigate();
     const [urlToppings, setUrl] = useState('/api/toppings');
+
     const handleDoughType = (dough) => {
         setDough(dough);
     };
@@ -23,22 +24,39 @@ function PizzaMenu() {
     };
 
     const handleToppings = (toppings) => {
-
         setToppings(toppings);
-        console.log(toppings)
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (toppings.length > 0 && size !== '' && dough !== '') {
             const pizzaDetails = {
-                name: `Pizza with ${dough} dough, ${size} size, and ${toppings.join(', ')} toppings`,
                 dough: dough,
                 size: size,
                 toppings: toppings
             };
-            addToCart(pizzaDetails);
-            navigate('/home/cart', { state: { pizzaDetails } });
+
+            // Save to server
+            try {
+                const response = await fetch('/api/pizzas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(pizzaDetails)
+                });
+
+                if (response.ok) {
+                    const savedPizza = await response.json();
+                    addToCart(savedPizza);
+                    navigate('/home/cart', { state: { pizzaDetails: savedPizza } });
+                } else {
+                    alert('Error saving pizza details.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving pizza details.');
+            }
         } else {
             alert('Please select all options before proceeding.');
         }

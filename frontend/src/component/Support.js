@@ -11,6 +11,7 @@ import FloatingCartButton from "./FloatingCartButton";
 import {GlobalProvider} from "./GlobalContext";
 import Cart from "./Cart";
 import OrderDetailsForm from "./OrderDetailsForm";
+import UpdatePizza from "./UpdatePizza";
 // import OrderDetails from './OrderDetails';
 function Support() {
     const handleCartClick = () => {
@@ -32,6 +33,8 @@ function Support() {
                     <Route path="/home/cart" element={<Cart/>}/>
                     {/*<Route path="/order" element={<OrderingDetails />} />*/}
                     <Route path="/orderform/:orderId" element={<OrderDetailsForm urlToppings={'/api/toppings'}/>} />
+                    <Route path="/home/pizza/update/:pizzaId" element={<UpdatePizza />} />
+
                 </Routes>
             </GlobalProvider>
         </BrowserRouter>

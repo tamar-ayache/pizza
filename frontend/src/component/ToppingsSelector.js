@@ -6,6 +6,7 @@ function ToppingsSelector({ url, choose }) {
     const [selectedTopping, setSelectedTopping] = useState('');
     const [toppingsList, setToppingsList] = useState([]);
     const [selectedToppings, setSelectedToppings] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(40);
 
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
 
@@ -19,6 +20,7 @@ function ToppingsSelector({ url, choose }) {
             const newSelectedToppings = [...selectedToppings, topping];
             setSelectedToppings(newSelectedToppings);
             choose(newSelectedToppings);
+            updatePrice(newSelectedToppings.length);
         }
     };
 
@@ -26,6 +28,13 @@ function ToppingsSelector({ url, choose }) {
         const newSelectedToppings = selectedToppings.filter((topping, index) => index !== id);
         setSelectedToppings(newSelectedToppings);
         choose(newSelectedToppings);
+        updatePrice(newSelectedToppings.length);
+    };
+
+    const updatePrice = (toppingCount) => {
+        console.log("totalPrice: " +totalPrice)
+        console.log("toppingCount: " +toppingCount)
+        setTotalPrice(40+toppingCount * 3);
     };
 
     const getTopping = async () => {
@@ -71,6 +80,9 @@ function ToppingsSelector({ url, choose }) {
                         {topping} <Button close onClick={() => removeTopping(index)} />
                     </div>
                 ))}
+            </div>
+            <div>
+                <h5>Total Price: ₪{totalPrice}</h5>
             </div>
         </>
     );

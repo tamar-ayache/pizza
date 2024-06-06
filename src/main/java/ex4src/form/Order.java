@@ -19,7 +19,6 @@ public class Order {
         this.orderId = count.incrementAndGet();
     }
 
-    // Constructor
     public Order(String firstName, String lastName, Address address, String phone, String arrivalTime, List<Pizza> cartItems) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,8 +26,6 @@ public class Order {
         this.phone = phone;
         this.arrivalTime = arrivalTime;
         this.cartItems = cartItems;
-
-        // Add the order to the list
         orders.add(this);
     }
 
@@ -37,16 +34,14 @@ public class Order {
     }
 
     public static Order getOrderById(int id) {
-        // Assuming 'orders' is a list of all orders, you can iterate over it to find the order with the given id
         for (Order order : orders) {
             if (order.getOrderId() == id) {
                 return order;
             }
         }
-        return null; // If no order with the given id is found
+        return null;
     }
 
-    // Getters and Setters
     public String getFirstName() {
         return firstName;
     }
@@ -95,7 +90,6 @@ public class Order {
         this.cartItems = cartItems;
     }
 
-    // Optional: Override toString() method for debugging purposes
     @Override
     public String toString() {
         return "Order{" +

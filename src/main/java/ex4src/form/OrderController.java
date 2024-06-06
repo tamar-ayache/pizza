@@ -19,12 +19,32 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public Order getOrderById(@PathVariable int orderId) {
-        // Assuming 'orders' is a list of all orders, you can iterate over it to find the order with the given id
         for (Order order : orders) {
             if (order.getOrderId() == orderId) {
                 return order;
             }
         }
-        return null; // If no order with the given id is found
+        return null;
+    }
+
+    @PutMapping("/{orderId}")
+    public Order updateOrder(@PathVariable int orderId, @RequestBody Order updatedOrder) {
+        for (Order order : orders) {
+            if (order.getOrderId() == orderId) {
+                order.setFirstName(updatedOrder.getFirstName());
+                order.setLastName(updatedOrder.getLastName());
+                order.setAddress(updatedOrder.getAddress());
+                order.setPhone(updatedOrder.getPhone());
+                order.setArrivalTime(updatedOrder.getArrivalTime());
+                order.setCartItems(updatedOrder.getCartItems());
+                return order;
+            }
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{orderId}")
+    public void deleteOrder(@PathVariable int orderId) {
+        orders.removeIf(order -> order.getOrderId() == orderId);
     }
 }
