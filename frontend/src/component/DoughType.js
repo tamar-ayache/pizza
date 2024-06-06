@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input } from 'reactstrap';
 
-function DoughType({ choose }) {
+function DoughType({ choose , previousSelection}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [doughTypes, setDoughTypes] = useState([]);
     const [selectedDough, setSelectedDough] = useState('');
 
+    useEffect(() => {
+        setSelectedDough(previousSelection || ''); // Set the selected size to the previous selection if available
+    }, [previousSelection]);
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
 
     const handleSelect = (dough) => {

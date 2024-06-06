@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input } from 'reactstrap';
 
-function PizzaSize({ choose }) {
+function PizzaSize({ choose , previousSelection}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedSize, setSelectedSize] = useState('');
     const [sizes, setSizes] = useState([]);
+
+    useEffect(() => {
+        setSelectedSize(previousSelection || ''); // Set the selected size to the previous selection if available
+    }, [previousSelection]);
 
     useEffect(() => {
         fetch('/api/sizes') // קריאה לשרת לקבלת רשימת הגדלים

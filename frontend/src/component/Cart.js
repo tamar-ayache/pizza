@@ -20,7 +20,7 @@ const Cart = () => {
     const updatePrice = () => {
         let totalPrice = 0;
         cartItems.forEach(item => {
-            totalPrice += 40 + item.toppings.length * 3;
+            // totalPrice += 40 + item.toppings.length * 3;
         });
         setPrice(totalPrice);
     };
@@ -28,28 +28,6 @@ const Cart = () => {
     useEffect(() => {
         updatePrice();
     }, [cartItems]);
-
-    const handleOrder = async () => {
-        try {
-            const response = await fetch('/api/order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ cartItems, totalPrice: price }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Order saved:', data);
-                navigate('/orderform/' + data.orderId);
-            } else {
-                console.error('Failed to save order');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
 
     return (
         <>
@@ -77,7 +55,7 @@ const Cart = () => {
                     ))}
                 </ul>
             )}
-            <p>Total price: {price}</p>
+            <p>total price {price}</p>
 
             <Button color="danger" onClick={resetCart}>
                 Delete All
@@ -85,7 +63,7 @@ const Cart = () => {
             <Button color="primary" onClick={() => navigate("/home/PizzaMenu")}>
                 Add new item
             </Button>
-            <Button color="success" onClick={handleOrder}>
+            <Button color="success" onClick={() => navigate('/home/PizzaMenu/OrderingDetails', { state: { cartItems } })}>
                 Details and payment
             </Button>
         </>

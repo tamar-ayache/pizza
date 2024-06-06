@@ -1,20 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Container, Row, Col, Form } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import {Button, Container, Row, Col, Form} from 'reactstrap';
+import {useNavigate} from 'react-router-dom';
 import DoughType from "./DoughType";
 import PizzaSize from "./PizzaSize";
 import ToppingsSelector from "./ToppingsSelector";
-import { GlobalContext } from './GlobalContext';
+import {GlobalContext} from './GlobalContext';
 
 function PizzaMenu() {
-    const { addToCart } = useContext(GlobalContext);
+    const {addToCart} = useContext(GlobalContext);
     const [dough, setDough] = useState('');
     const [size, setSize] = useState('');
     const [toppings, setToppings] = useState([]);
     const navigate = useNavigate();
     const [urlToppings, setUrl] = useState('/api/toppings');
-
+    const [previousDough, setPreviousDough] = useState('');
+    const [previousSize, setPreviousSize] = useState('');
+    const [previousToppings, setPreviousToppings] = useState([]);
     const handleDoughType = (dough) => {
         setDough(dough);
     };
@@ -48,8 +50,9 @@ function PizzaMenu() {
 
                 if (response.ok) {
                     const savedPizza = await response.json();
+                    console.log("savedPizza"  +  savedPizza)
                     addToCart(savedPizza);
-                    navigate('/home/cart', { state: { pizzaDetails: savedPizza } });
+                    navigate('/home/cart', {state: {pizzaDetails: savedPizza}});
                 } else {
                     alert('Error saving pizza details.');
                 }
@@ -67,17 +70,17 @@ function PizzaMenu() {
             <Container>
                 <Row>
                     <Col md="6">
-                        <DoughType choose={handleDoughType} />
+                        <DoughType choose={handleDoughType} selected={dough} previousSelection={previousDough} />
                     </Col>
                 </Row>
                 <Row>
                     <Col md="6">
-                        <PizzaSize choose={handleSize} />
+                        <PizzaSize choose={handleSize} selected={size} previousSelection={previousSize} />
                     </Col>
                 </Row>
                 <Row>
                     <Col md="6">
-                        <ToppingsSelector url={urlToppings} choose={handleToppings} />
+                        <ToppingsSelector url={urlToppings} choose={handleToppings} selected={toppings} previousSelection={previousToppings} />
                     </Col>
                 </Row>
                 <Row>

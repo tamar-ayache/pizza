@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useContext } from 'react';
 import { GlobalContext } from './GlobalContext';
+import { useNavigate } from 'react-router-dom';
 
-function OrderingDetails() {
-    const navigate = useNavigate();
+
+function OrderingDetails({}) {
+    const navigate = useNavigate(); // השימוש ב-hook של useNavigate
     const location = useLocation();
     const { cartItems } = location.state || {};
     const [firstName, setFirstName] = useState('');
@@ -37,7 +40,7 @@ function OrderingDetails() {
         setArrivalTime(options[0]);
     }, []);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (phone.length !== 10) {
             alert('Phone number must be exactly 10 digits.');
@@ -61,22 +64,26 @@ function OrderingDetails() {
             cartItems
         };
 
-        addToCart(orderDetails);
+        // addToCart(orderDetails);
 
-        try {
-            const response = await fetch('/api/order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderDetails),
+        fetch('/api/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderDetails),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // אם הבקשה הצליחה, העבר את המשתמש לדף ההזמנה עם ה-id של ההזמנה החדשה
+                navigate(`/orderform`); // השימוש ב-navigate כאן
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
-            const data = await response.json();
-            console.log('Success:', data);
-            navigate(`/orderform/${data.orderId}`);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        console.log(JSON.stringify(orderDetails, null, 2));
+        // You can send the orderDetails JSON to a server or save it as needed
     };
 
     return (

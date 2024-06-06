@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input, Button } from 'reactstrap';
 
-function ToppingsSelector({ url, choose }) {
+function ToppingsSelector({ url, choose , previousSelection}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedTopping, setSelectedTopping] = useState('');
     const [toppingsList, setToppingsList] = useState([]);
     const [selectedToppings, setSelectedToppings] = useState([]);
     const [totalPrice, setTotalPrice] = useState(40);
-
+    const [previousTopping, setPreviousTopping] = useState(''); // הוספת סטייט לפרטים הקודמים של התוספות
+    useEffect(() => {
+        setSelectedToppings(previousSelection || ''); // Set the selected size to the previous selection if available
+    }, [previousSelection]);
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
 
     const handleSelectTopping = (topping) => {

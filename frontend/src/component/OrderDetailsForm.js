@@ -20,13 +20,16 @@ import ToppingsSelector from "./ToppingsSelector";
 function OrderDetailsForm() {
     const [orderId, setOrderId] = useState('');
     const [orderDetails, setOrderDetails] = useState(null);
-    const [editModalOpen, setEditModalOpen] = useState(false); // State to control modal visibility
-    const [editedItem, setEditedItem] = useState(null); // State to store the item being edited
-    const [editedItemIndex, setEditedItemIndex] = useState(null); // State to store the index of the item being edited
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [editedItem, setEditedItem] = useState(null);
+    const [editedItemIndex, setEditedItemIndex] = useState(null);
     const [dough, setDough] = useState('');
     const [size, setSize] = useState('');
     const [toppings, setToppings] = useState([]);
     const [urlToppings, setUrl] = useState('/api/toppings');
+    const [previousDough, setPreviousDough] = useState('');
+    const [previousSize, setPreviousSize] = useState('');
+    const [previousToppings, setPreviousToppings] = useState([]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -54,37 +57,93 @@ function OrderDetailsForm() {
     };
 
     const handleEdit = (item, index) => {
-        setEditedItemIndex(index); // Set the index of the item being edited
-        setEditedItem(item); // Set the item being edited
-        setEditModalOpen(true); // Open the edit modal
+        setEditedItemIndex(index);
+        setEditedItem(item);
+        setDough(item.dough);
+        setSize(item.size);
+        setToppings(item.toppings);
+        setPreviousDough(item.dough);
+        setPreviousSize(item.size);
+        setPreviousToppings(item.toppings);
+        setEditModalOpen(true);
     };
 
+
     const toggleEditModal = () => {
-        setEditModalOpen(!editModalOpen); // Toggle the edit modal
+        setEditModalOpen(!editModalOpen);
     };
 
     const handleSaveChanges = () => {
-        // Update the edited item in the cartItems array
-        const updatedCartItems = orderDetails.cartItems.map((item, index) => {
-            if (index === editedItemIndex) {
-                return {
-                    ...item,
-                    dough: dough,
-                    size: size,
-                    toppings: toppings
-                };
+        // בדיקה האם יש שדות ריקים
+        if (!dough || !size || !toppings.length) {
+            const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+            if (confirmDelete) {
+                // ביצוע מחיקת ההזמנה
+                deleteOrder();
             }
-            return item;
-        });
+            return;
+        }
 
-        // Update the orderDetails state with the updated cartItems
-        setOrderDetails({
+        // המשך עם התהליך כרגיל
+        const updatedCartItems = Array.isArray(orderDetails.cartItems) ? [...orderDetails.cartItems] : [];
+        if (editedItemIndex !== null) {
+            updatedCartItems[editedItemIndex] = {
+                ...updatedCartItems[editedItemIndex],
+                dough: dough,
+                size: size,
+                toppings: toppings
+            };
+        } else {
+            updatedCartItems.push({
+                dough: dough,
+                size: size,
+                toppings: toppings
+            });
+        }
+
+        const updatedOrderDetails = {
             ...orderDetails,
             cartItems: updatedCartItems
-        });
+        };
 
-        toggleEditModal(); // Close the edit modal after saving changes
+        fetch(`/api/order/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedOrderDetails)
+        })
+            .then(response => {
+                if (response.ok) {
+                    setOrderDetails(updatedOrderDetails);
+                    toggleEditModal();
+                } else {
+                    alert('Error updating order.');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating order:', error);
+            });
     };
+
+    const deleteOrder = () => {
+        fetch(`/api/order/${orderId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    // מחיקת ההזמנה הצליחה, נסיר את הפרטים ונסגור את המודל
+                    setOrderDetails(null);
+                    toggleEditModal();
+                } else {
+                    alert('Error deleting order.');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting order:', error);
+            });
+    };
+
 
     return (
         <div style={{ textAlign: 'center', maxWidth: '600px', margin: 'auto', fontFamily: 'Arial, sans-serif', color: '#333' }}>
@@ -112,7 +171,7 @@ function OrderDetailsForm() {
                     <p><strong>Address:</strong> {orderDetails.address.city} {orderDetails.address.street} {orderDetails.address.houseNumber}</p>
                     <p><strong>Arrival Time:</strong> {orderDetails.arrivalTime}</p>
                     <h2 style={{ marginTop: '30px', color: '#FF6F61' }}>Selected Items</h2>
-                    {orderDetails.cartItems.map((item, index) => (
+                    {orderDetails && orderDetails.cartItems && orderDetails.cartItems.map((item, index) => (
                         <div key={index} style={{ border: '1px solid #FF6F61', padding: '10px', marginTop: '15px' }}>
                             <h3>Selected Item {index + 1}</h3>
                             <p><strong>Dough:</strong> {item.dough}</p>
@@ -124,30 +183,24 @@ function OrderDetailsForm() {
                 </div>
             )}
             {/* Edit Modal */}
-            <Modal isOpen={editModalOpen} toggle={toggleEditModal}>
+            <Modal isOpen={editModalOpen} toggle={toggleEditModal} size="xl">
                 <ModalHeader toggle={toggleEditModal}>Edit Item</ModalHeader>
                 <ModalBody>
-                    {/* Edit form content goes here */}
-                    <Form onSubmit={handleSubmit}>
+                    <Form>
                         <Container>
                             <Row>
                                 <Col md="6">
-                                    <DoughType choose={handleDoughType} />
+                                    <DoughType choose={handleDoughType} selected={dough} previousSelection={previousDough} />
                                 </Col>
                             </Row>
                             <Row>
                                 <Col md="6">
-                                    <PizzaSize choose={handleSize} />
+                                    <PizzaSize choose={handleSize} selected={size} previousSelection={previousSize} />
                                 </Col>
                             </Row>
                             <Row>
                                 <Col md="6">
-                                    <ToppingsSelector url={urlToppings} choose={handleToppings} />
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md="6">
-                                    <Button color="success" type="submit">Add to Cart</Button>
+                                    <ToppingsSelector url={urlToppings} choose={handleToppings} selected={toppings} previousSelection={previousToppings} />
                                 </Col>
                             </Row>
                         </Container>

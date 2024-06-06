@@ -32,7 +32,7 @@ function Support() {
                     <Route path="/home/PizzaMenu/OrderingDetails" element={<OrderingDetails/>}/>
                     <Route path="/home/cart" element={<Cart/>}/>
                     {/*<Route path="/order" element={<OrderingDetails />} />*/}
-                    <Route path="/orderform/:orderId" element={<OrderDetailsForm urlToppings={'/api/toppings'}/>} />
+                    <Route path="/orderform" element={<OrderDetailsForm urlToppings={'/api/toppings'}/>} />
                     <Route path="/home/pizza/update/:pizzaId" element={<UpdatePizza />} />
 
                 </Routes>

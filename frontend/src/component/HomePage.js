@@ -12,7 +12,9 @@ function HomePage() {
                 </Row>
                 <Row>
                     <Menu/>
+
                 </Row>
+
             </Container>
         </>
     );
