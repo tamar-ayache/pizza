@@ -19,7 +19,7 @@ A list of pizzas (non-empty)
 ## Available Scripts
 
 In the project directory, you can run:
-
+### cd frontend and after:
 ### `npm start`
 but first run configuration EX4Application
 Runs the app in the development mode.\
