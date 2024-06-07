@@ -13,7 +13,15 @@ import Cart from "./Cart";
 import OrderDetailsForm from "./OrderDetailsForm";
 import UpdatePizza from "./UpdatePizza";
 // import OrderDetails from './OrderDetails';
+/**
+ * Support component sets up the routing and context provider for the application.
+ * It includes a floating cart button and defines routes for various pages.
+ */
 function Support() {
+    /**
+     * Handles the click event for the floating cart button.
+     * This function can be modified to include navigation or modal opening logic.
+     */
     const handleCartClick = () => {
         alert("Cart button clicked!");
         // You can replace the alert with navigation or a modal opening

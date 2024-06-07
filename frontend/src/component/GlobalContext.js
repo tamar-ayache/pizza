@@ -1,9 +1,9 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-
+// Initial state for the global context
 const initialState = {
     cartItems: []
 };
-
+// Reducer function to manage the state based on different actions
 const reducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_CART':

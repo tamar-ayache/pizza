@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col, Form, Input } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-
+/**
+ * UpdatePizza component allows users to update or delete an existing pizza.
+ * It fetches the pizza details based on the pizzaId from the URL parameters.
+ */
 function UpdatePizza() {
     const { pizzaId } = useParams();
     const [dough, setDough] = useState('');
     const [size, setSize] = useState('');
     const [toppings, setToppings] = useState([]);
     const navigate = useNavigate();
-
+    // Fetch pizza details when component mounts or pizzaId changes
     useEffect(() => {
         fetch(`/api/pizzas/${pizzaId}`)
             .then(response => response.json())
@@ -19,7 +22,11 @@ function UpdatePizza() {
             })
             .catch(error => console.error('Error fetching pizza:', error));
     }, [pizzaId]);
-
+    /**
+     * Handles the form submission to update the pizza details.
+     *
+     * @param {Event} e - The form submission event
+     */
     const handleUpdate = (e) => {
         e.preventDefault();
         const updatedPizza = { dough, size, toppings };

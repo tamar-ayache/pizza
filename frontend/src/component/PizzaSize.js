@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input } from 'reactstrap';
-
+/**
+ * PizzaSize component provides a dropdown for selecting a pizza size.
+ * It fetches the available sizes from an API endpoint and allows the user to select one.
+ *
+ * @param {Object} props - The component props
+ * @param {Function} props.choose - The callback function to call with the selected pizza size
+ * @param {string} [props.previousSelection] - The previously selected pizza size, if any
+ */
 function PizzaSize({ choose , previousSelection}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedSize, setSelectedSize] = useState('');

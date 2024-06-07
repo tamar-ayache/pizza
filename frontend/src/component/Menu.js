@@ -1,7 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Button, Col, Row} from "reactstrap";
-
+/**
+ * The Menu component provides navigation buttons to different parts of the application.
+ * It uses React Router for navigation and Reactstrap for styling.
+ */
 function Menu() {
     const navigate = useNavigate();
 

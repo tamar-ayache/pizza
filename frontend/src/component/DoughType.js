@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input } from 'reactstrap';
-
+/**
+ * The DoughType component provides a dropdown for selecting a type of dough.
+ * It fetches the available dough types from an API endpoint and allows the user to select one.
+ * The selected dough type is passed back to the parent component through a callback function.
+ *
+ * @param {Object} props - The component props
+ * @param {Function} props.choose - The callback function to call with the selected dough type
+ * @param {string} [props.previousSelection] - The previously selected dough type, if any
+ */
 function DoughType({ choose , previousSelection}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [doughTypes, setDoughTypes] = useState([]);
@@ -15,7 +23,7 @@ function DoughType({ choose , previousSelection}) {
         setSelectedDough(dough);
         choose(dough);
     };
-
+    // Effect to fetch the available dough types from the API
     useEffect(() => {
         const fetchDoughTypes = async () => {
             try {

@@ -6,7 +6,10 @@ import DoughType from "./DoughType";
 import PizzaSize from "./PizzaSize";
 import ToppingsSelector from "./ToppingsSelector";
 import {GlobalContext} from './GlobalContext';
-
+/**
+ * PizzaMenu component allows users to customize and add a pizza to their cart.
+ * It provides options for selecting dough type, pizza size, and toppings.
+ */
 function PizzaMenu() {
     const {addToCart} = useContext(GlobalContext);
     const [dough, setDough] = useState('');
@@ -17,18 +20,35 @@ function PizzaMenu() {
     const [previousDough, setPreviousDough] = useState('');
     const [previousSize, setPreviousSize] = useState('');
     const [previousToppings, setPreviousToppings] = useState([]);
+    /**
+     * Handles the selection of dough type.
+     *
+     * @param {string} dough - The selected dough type
+     */
     const handleDoughType = (dough) => {
         setDough(dough);
     };
-
+    /**
+     * Handles the selection of pizza size.
+     *
+     * @param {string} size - The selected pizza size
+     */
     const handleSize = (size) => {
         setSize(size);
     };
-
+    /**
+     * Handles the selection of toppings.
+     *
+     * @param {Array} toppings - The selected toppings
+     */
     const handleToppings = (toppings) => {
         setToppings(toppings);
     };
-
+    /**
+     * Handles form submission to save pizza details and add to cart.
+     *
+     * @param {Event} e - The form submission event
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (toppings.length > 0 && size !== '' && dough !== '') {

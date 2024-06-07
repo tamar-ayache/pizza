@@ -1,6 +1,9 @@
 import React from 'react'; // Import React
 import 'bootstrap/dist/css/bootstrap.min.css';  // Import Bootstrap CSS for styling
-
+/**
+ * The ContactAs component renders a "Contact Us" section.
+ * It includes information such as email and phone number for users to reach out.
+ */
 function ContactAs() {
     return (
         <div className="container mt-5">

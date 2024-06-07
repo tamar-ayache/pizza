@@ -16,7 +16,10 @@ import {
 import DoughType from "./DoughType";
 import PizzaSize from "./PizzaSize";
 import ToppingsSelector from "./ToppingsSelector";
-
+/**
+ * OrderDetailsForm component provides a form to fetch and edit order details.
+ * It includes functionality to edit the dough type, size, and toppings of the pizzas in an order.
+ */
 function OrderDetailsForm() {
     const [orderId, setOrderId] = useState('');
     const [orderDetails, setOrderDetails] = useState(null);

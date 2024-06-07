@@ -2,7 +2,10 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'reactstrap';
 import { Link, Outlet } from 'react-router-dom';
-
+/**
+ * SupportBar component renders a navigation bar with links to different pages.
+ * It uses React Router for navigation and Reactstrap for styling.
+ */
 function SupportBar() {
     return (
         <>

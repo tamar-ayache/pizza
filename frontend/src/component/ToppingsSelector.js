@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupText, Input, Button } from 'reactstrap';
 
+/**
+ * ToppingsSelector component provides a dropdown for selecting pizza toppings.
+ * It fetches the available toppings from an API endpoint and allows the user to select and remove toppings.
+ * The total price is updated based on the number of selected toppings.
+ *
+ * @param {Object} props - The component props
+ * @param {string} props.url - The API endpoint to fetch the toppings from
+ * @param {Function} props.choose - The callback function to call with the selected toppings
+ * @param {Array} [props.previousSelection] - The previously selected toppings, if any
+ */
 function ToppingsSelector({ url, choose , previousSelection}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedTopping, setSelectedTopping] = useState('');

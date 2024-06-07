@@ -5,7 +5,10 @@ import PizzaMenu from "./PizzaMenu";
 import DrinksMenu from "./DrinksMenu";
 import MenuBar from "./MenuBar";
 import { useNavigate } from 'react-router-dom';
-
+/**
+ * Menubar component provides navigation buttons to different menus.
+ * It uses React Router for navigation and Bootstrap for styling.
+ */
 
 function Menubar() {
     const navigate = useNavigate();

@@ -6,7 +6,10 @@ import { useContext } from 'react';
 import { GlobalContext } from './GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
-
+/**
+ * OrderingDetails component provides a form for users to enter their order details.
+ * It includes fields for personal information, address, phone number, and arrival time.
+ */
 function OrderingDetails({}) {
     const navigate = useNavigate(); // השימוש ב-hook של useNavigate
     const location = useLocation();
@@ -20,7 +23,7 @@ function OrderingDetails({}) {
     const [arrivalTime, setArrivalTime] = useState('');
     const [timeOptions, setTimeOptions] = useState([]);
     const { addToCart } = useContext(GlobalContext);
-
+    // Effect to generate time options for arrival time
     useEffect(() => {
         const now = new Date();
         const currentHour = now.getHours();

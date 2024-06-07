@@ -2,12 +2,18 @@ import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from './GlobalContext';
 import { Button, Card, CardBody, CardText, CardTitle } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-
+/**
+ * Cart component displays the items in the user's cart and provides functionalities
+ * to remove items, reset the cart, and navigate to other pages.
+ */
 const Cart = () => {
     const { cartItems, resetCart, removeFromCart } = useContext(GlobalContext);
     const navigate = useNavigate();
     const [price, setPrice] = useState(0);
-
+    /**
+     * Handles the removal of an item from the cart.
+     * @param {number} index - The index of the item to remove.
+     */
     const handleRemoveItem = async (index) => {
         const itemToRemove = cartItems[index];
         await fetch(`/api/order/${itemToRemove.orderId}`, {
@@ -16,7 +22,9 @@ const Cart = () => {
         removeFromCart(index);
         updatePrice();
     };
-
+    /**
+     * Updates the total price of the items in the cart.
+     */
     const updatePrice = () => {
         let totalPrice = 0;
         cartItems.forEach(item => {
