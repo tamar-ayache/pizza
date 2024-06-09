@@ -6,12 +6,8 @@ import { useContext } from 'react';
 import { GlobalContext } from './GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
-/**
- * OrderingDetails component provides a form for users to enter their order details.
- * It includes fields for personal information, address, phone number, and arrival time.
- */
 function OrderingDetails({}) {
-    const navigate = useNavigate(); // השימוש ב-hook של useNavigate
+    const navigate = useNavigate();
     const location = useLocation();
     const { cartItems } = location.state || {};
     const [firstName, setFirstName] = useState('');
@@ -23,7 +19,7 @@ function OrderingDetails({}) {
     const [arrivalTime, setArrivalTime] = useState('');
     const [timeOptions, setTimeOptions] = useState([]);
     const { addToCart } = useContext(GlobalContext);
-    // Effect to generate time options for arrival time
+
     useEffect(() => {
         const now = new Date();
         const currentHour = now.getHours();
@@ -67,8 +63,6 @@ function OrderingDetails({}) {
             cartItems
         };
 
-        // addToCart(orderDetails);
-
         fetch('/api/order', {
             method: 'POST',
             headers: {
@@ -76,17 +70,16 @@ function OrderingDetails({}) {
             },
             body: JSON.stringify(orderDetails),
         })
-            .then(response => response.json())
+            .then(response => response.json()) // המרת התשובה לאובייקט JSON
             .then(data => {
-                console.log('Success:', data);
-                // אם הבקשה הצליחה, העבר את המשתמש לדף ההזמנה עם ה-id של ההזמנה החדשה
-                navigate(`/orderform`); // השימוש ב-navigate כאן
+                console.log('Success:', data); // הדפסת התשובה
+                alert(`Order placed successfully! Your order ID is ${data.orderId}.`);
+                navigate(`/orderform/${data.orderId}`);
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-        console.log(JSON.stringify(orderDetails, null, 2));
-        // You can send the orderDetails JSON to a server or save it as needed
+
     };
 
     return (
@@ -182,7 +175,7 @@ function OrderingDetails({}) {
                                 ))}
                             </Input>
                         </FormGroup>
-                        <Button type="submit" color="primary">Sent order</Button>
+                        <Button type="submit" color="primary">Send Order</Button>
                     </Form>
                 </Col>
             </Row>

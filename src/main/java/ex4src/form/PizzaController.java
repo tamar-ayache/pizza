@@ -22,7 +22,20 @@ public class PizzaController {
      * @return a {@code ResponseEntity} with the added pizza and HTTP status {@code CREATED}
      */
     @PostMapping
-    public ResponseEntity<Pizza> addPizza(@RequestBody Pizza pizza) {
+    public ResponseEntity<?> addPizza(@RequestBody Pizza pizza) {
+        // Validate dough
+        if (pizza.getDough() == null || pizza.getDough().isEmpty()) {
+            return new ResponseEntity<>("Dough type is mandatory", HttpStatus.BAD_REQUEST);
+        }
+        // Validate size
+        if (pizza.getSize() == null || pizza.getSize().isEmpty()) {
+            return new ResponseEntity<>("Size is mandatory", HttpStatus.BAD_REQUEST);
+        }
+        // Validate toppings
+        if (pizza.getToppings() == null || pizza.getToppings().isEmpty()) {
+            pizza.setToppings(List.of("ללא תוספות"));
+        }
+
         pizzas.add(pizza);
         return new ResponseEntity<>(pizza, HttpStatus.CREATED);
     }
@@ -60,7 +73,21 @@ public class PizzaController {
      * or HTTP status {@code NOT_FOUND} if not found
      */
     @PutMapping("/{pizzaId}")
-    public ResponseEntity<Pizza> updatePizza(@PathVariable int pizzaId, @RequestBody Pizza updatedPizza) {
+    public ResponseEntity<?> updatePizza(@PathVariable int pizzaId, @RequestBody Pizza updatedPizza) {
+
+        // Validate dough
+        if (updatedPizza.getDough() == null || updatedPizza.getDough().isEmpty()) {
+            return new ResponseEntity<>("Dough type is mandatory", HttpStatus.BAD_REQUEST);
+        }
+        // Validate size
+        if (updatedPizza.getSize() == null || updatedPizza.getSize().isEmpty()) {
+            return new ResponseEntity<>("Size is mandatory", HttpStatus.BAD_REQUEST);
+        }
+        // Validate toppings
+        if (updatedPizza.getToppings() == null || updatedPizza.getToppings().isEmpty()) {
+            updatedPizza.setToppings(List.of("no topping"));
+        }
+
         Optional<Pizza> existingPizzaOptional = pizzas.stream()
                 .filter(pizza -> pizza.getPizzaId() == pizzaId)
                 .findFirst();
@@ -75,6 +102,7 @@ public class PizzaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     /**
      * Deletes a pizza by its ID.
      *

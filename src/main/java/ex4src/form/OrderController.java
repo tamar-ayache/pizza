@@ -1,9 +1,12 @@
 package ex4src.form;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@code OrderController} class provides RESTful endpoints for managing orders.
@@ -48,16 +51,43 @@ public class OrderController {
      * @return the updated order, or {@code null} if no order is found
      */
     @PutMapping("/{orderId}")
-    public Order updateOrder(@PathVariable int orderId, @RequestBody Order updatedOrder) {
+    public ResponseEntity<?> updateOrder(@PathVariable int orderId, @RequestBody Order updatedOrder) {
         for (Order order : orders) {
             if (order.getOrderId() == orderId) {
-                order.setFirstName(updatedOrder.getFirstName());
-                order.setLastName(updatedOrder.getLastName());
-                order.setAddress(updatedOrder.getAddress());
-                order.setPhone(updatedOrder.getPhone());
-                order.setArrivalTime(updatedOrder.getArrivalTime());
-                order.setCartItems(updatedOrder.getCartItems());
-                return order;
+                if (updatedOrder.getFirstName() == null || updatedOrder.getFirstName().isEmpty()) {
+                    return new ResponseEntity<>("first name type is mandatory", HttpStatus.BAD_REQUEST);
+                }
+                if (updatedOrder.getLastName() == null || updatedOrder.getLastName().isEmpty()) {
+                    return new ResponseEntity<>("last name type is mandatory", HttpStatus.BAD_REQUEST);
+                }
+                if (updatedOrder.getAddress().getCity() == null || updatedOrder.getAddress().getCity().isEmpty()) {
+                    return new ResponseEntity<>("address city type is mandatory", HttpStatus.BAD_REQUEST);
+                }
+                if (updatedOrder.getAddress().getStreet() == null || updatedOrder.getAddress().getStreet().isEmpty()) {
+                    return new ResponseEntity<>("address street type is mandatory", HttpStatus.BAD_REQUEST);
+                }
+                if (updatedOrder.getAddress().getHouseNumber() == null || updatedOrder.getAddress().getHouseNumber().isEmpty()) {
+                    return new ResponseEntity<>("house number street type is mandatory", HttpStatus.BAD_REQUEST);
+                }
+                if (updatedOrder.getPhone() == null || updatedOrder.getPhone().isEmpty() || updatedOrder.getPhone().length() != 10 ) {
+                    return new ResponseEntity<>("first name type is mandatory", HttpStatus.BAD_REQUEST);
+                }
+                Optional<Order> existingOrderOptional = orders.stream()
+                        .filter(pizza -> pizza.getOrderId() == orderId)
+                        .findFirst();
+                if (existingOrderOptional.isPresent()) {
+                    Order existingOrder = existingOrderOptional.get();
+
+                    existingOrder.setFirstName(updatedOrder.getFirstName());
+                    existingOrder.setLastName(updatedOrder.getLastName());
+                    existingOrder.setAddress(updatedOrder.getAddress());
+                    existingOrder.setPhone(updatedOrder.getPhone());
+                    existingOrder.setArrivalTime(updatedOrder.getArrivalTime());
+                    existingOrder.setCartItems(updatedOrder.getCartItems());
+                    return new ResponseEntity<>(existingOrder, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
             }
         }
         return null;

@@ -10,12 +10,17 @@ const Cart = () => {
     const { cartItems, resetCart, removeFromCart } = useContext(GlobalContext);
     const navigate = useNavigate();
     const [price, setPrice] = useState(0);
+    const basePizzaPrice = 40; // מחיר בסיסי של הפיצה
+    const toppingPrice = 3; // מחיר עבור תוספת
+
     /**
      * Handles the removal of an item from the cart.
      * @param {number} index - The index of the item to remove.
      */
     const handleRemoveItem = async (index) => {
+
         const itemToRemove = cartItems[index];
+        const totalPriceToRemove = basePizzaPrice + itemToRemove.toppings.length * toppingPrice;
         await fetch(`/api/order/${itemToRemove.orderId}`, {
             method: 'DELETE'
         });
@@ -25,11 +30,18 @@ const Cart = () => {
     /**
      * Updates the total price of the items in the cart.
      */
-    const updatePrice = () => {
+    // בקוד של Cart.js, מתחת להגדרת הפונקציות
+    /**
+     * Updates the total price of the items in the cart.
+     * @param {number} removedItemPrice - The price of the removed item.
+     */
+    const updatePrice = (removedItemPrice) => {
+
         let totalPrice = 0;
         cartItems.forEach(item => {
-            // totalPrice += 40 + item.toppings.length * 3;
+            totalPrice += basePizzaPrice + item.toppings.length * toppingPrice;
         });
+        totalPrice -= removedItemPrice; // פחות מחיר הפריט שנמחק
         setPrice(totalPrice);
     };
 
@@ -54,7 +66,9 @@ const Cart = () => {
                                     <p className="text-muted">Toppings: {item.toppings && item.toppings.length > 0
                                         ? item.toppings.join(', ')
                                         : 'No toppings selected'}</p>
+                                    <p>Price: {basePizzaPrice + item.toppings.length * toppingPrice}</p>
                                 </CardText>
+
                                 <Button color="danger" onClick={() => handleRemoveItem(index)}>
                                     Delete
                                 </Button>
@@ -63,7 +77,11 @@ const Cart = () => {
                     ))}
                 </ul>
             )}
-            <p>total price {price}</p>
+
+
+            <p>Total Order Price: {cartItems.reduce((total, item) => total + basePizzaPrice + item.toppings.length * toppingPrice, 0)}</p>
+
+
 
             <Button color="danger" onClick={resetCart}>
                 Delete All

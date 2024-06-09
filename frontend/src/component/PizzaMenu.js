@@ -51,11 +51,11 @@ function PizzaMenu() {
      */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (toppings.length > 0 && size !== '' && dough !== '') {
+        if (size !== '' && dough !== '') {
             const pizzaDetails = {
                 dough: dough,
                 size: size,
-                toppings: toppings
+                toppings: toppings.length > 0 ? toppings : ['no topping']
             };
 
             // Save to server
@@ -70,7 +70,7 @@ function PizzaMenu() {
 
                 if (response.ok) {
                     const savedPizza = await response.json();
-                    console.log("savedPizza"  +  savedPizza)
+                    // console.log("savedPizza"  +  savedPizza)
                     addToCart(savedPizza);
                     navigate('/home/cart', {state: {pizzaDetails: savedPizza}});
                 } else {
