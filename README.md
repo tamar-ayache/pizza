@@ -17,11 +17,11 @@ A list of pizzas (non-empty)
 ## Java version is 2021
 
 ## Available Scripts
-
-In the project directory, you can run:
-### cd frontend and after:
+In the project directory, you can need to do first:
+### cd frontend 
+and after:
 ### `npm start`
-but first run configuration EX4Application
+and also run configuration EX4Application
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
