@@ -16,6 +16,7 @@ import {
 import DoughType from "./DoughType";
 import PizzaSize from "./PizzaSize";
 import ToppingsSelector from "./ToppingsSelector";
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 
 function OrderDetailsForm() {
     const [orderId, setOrderId] = useState('');
@@ -31,6 +32,7 @@ function OrderDetailsForm() {
     const [previousSize, setPreviousSize] = useState('');
     const [previousToppings, setPreviousToppings] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         // Calculate total price whenever order details change
@@ -60,13 +62,29 @@ function OrderDetailsForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setErrorMessage('');
+
+        if (!uuidValidate(orderId)) {
+            setErrorMessage('Invalid Order ID format');
+            return;
+        }
 
         fetch(`/api/order/${orderId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        throw new Error('Invalid Order ID');
+                    }
+                    throw new Error('Order not found');
+                }
+                return response.json();
+            })
             .then(data => {
                 setOrderDetails(data);
             })
             .catch(error => {
+                setOrderDetails(null);
+                setErrorMessage(error.message);
                 console.error('Error fetching order details:', error);
             });
     };
@@ -192,6 +210,11 @@ function OrderDetailsForm() {
                         style={{marginTop: '20px', backgroundColor: '#FF6F61', border: 'none'}}>Get Order
                     Details</Button>
             </Form>
+            {errorMessage && (
+                <div style={{color: 'red', marginTop: '20px'}}>
+                    {errorMessage}
+                </div>
+            )}
             {orderDetails && (
                 <div style={{marginTop: '40px', borderTop: '2px solid #FF6F61', paddingTop: '20px'}}>
                     <h2 style={{color: '#FF6F61'}}>Customer Details</h2>
@@ -205,10 +228,10 @@ function OrderDetailsForm() {
                     {orderDetails && orderDetails.cartItems && orderDetails.cartItems.map((item, index) => (
                         <div key={index} style={{border: '1px solid #FF6F61', padding: '10px', marginTop: '15px'}}>
                             <h3>Selected Item {index + 1}</h3>
-                            <p><strong>Dough:</strong> {item.dough}</p>
-                            <p><strong>Size:</strong> {item.size}</p>
-                            <p><strong>Toppings:</strong> {item.toppings.join(', ')}</p>
-                            <p><strong>Price:</strong> {calculateItemPrice(item)}</p>
+                            <div><strong>Dough:</strong> {item.dough}</div>
+                            <div><strong>Size:</strong> {item.size}</div>
+                            <div><strong>Toppings:</strong> {item.toppings.join(', ')}</div>
+                            <div><strong>Price:</strong> {calculateItemPrice(item)}</div>
                             <Button color="info" onClick={() => handleEdit(item, index)}>Edit</Button>
                         </div>
                     ))}

@@ -19,7 +19,7 @@ function Menu() {
                     <Button color="success" onClick={() => handleNavigation('/home/PizzaMenu')}>Go to Pizzas</Button>
                 </Col>
                 <Col md="6">
-                    <Button color="success" onClick={() => handleNavigation('/orderform')}>last orders</Button>
+                    <Button color="success" onClick={() => handleNavigation('/orderform/0')}>last orders</Button>
                 </Col>
             </Row>
                        {/*<button onClick={() => handleNavigation('/drinks')}>Go to Drinks</button>*/}
