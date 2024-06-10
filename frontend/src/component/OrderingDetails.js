@@ -97,6 +97,8 @@ function OrderingDetails({}) {
                                 placeholder="Enter your first name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
+                                pattern="[A-Za-z]+"
+                                title="Please enter letters only"
                                 required
                             />
                         </FormGroup>
@@ -109,6 +111,8 @@ function OrderingDetails({}) {
                                 placeholder="Enter your last name"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
+                                pattern="[A-Za-z]+"
+                                title="Please enter letters only"
                                 required
                             />
                         </FormGroup>
@@ -127,7 +131,7 @@ function OrderingDetails({}) {
                         <FormGroup>
                             <Label for="houseNumber">House Number</Label>
                             <Input
-                                type="text"
+                                type="number"
                                 name="houseNumber"
                                 id="houseNumber"
                                 placeholder="Enter your house number"
@@ -145,6 +149,8 @@ function OrderingDetails({}) {
                                 placeholder="Enter your city"
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
+                                pattern="[A-Za-z]+"
+                                title="Please enter letters only"
                                 required
                             />
                         </FormGroup>

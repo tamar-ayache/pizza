@@ -1,9 +1,10 @@
 import React from "react";
 import {getSpaceUntilMaxLength} from "@testing-library/user-event/dist/utils";
+import {Image} from "react-bootstrap";
 
 function Logo() {
     return (
-        <img src={"/images/img.png"} alt="Logo"/>
+        <Image src={"/images/img.png"} alt="Logo" height={500}/>
     );
 }
 
