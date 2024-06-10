@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The {@code OrderController} class provides RESTful endpoints for managing orders.
@@ -35,9 +36,9 @@ public class OrderController {
      * @return the order with the specified ID, or {@code null} if no order is found
      */
     @GetMapping("/{orderId}")
-    public Order getOrderById(@PathVariable int orderId) {
+    public Order getOrderById(@PathVariable UUID orderId) {
         for (Order order : orders) {
-            if (order.getOrderId() == orderId) {
+            if (order.getOrderId().equals(orderId)) {
                 return order;
             }
         }
@@ -51,9 +52,9 @@ public class OrderController {
      * @return the updated order, or {@code null} if no order is found
      */
     @PutMapping("/{orderId}")
-    public ResponseEntity<?> updateOrder(@PathVariable int orderId, @RequestBody Order updatedOrder) {
+    public ResponseEntity<?> updateOrder(@PathVariable UUID orderId, @RequestBody Order updatedOrder) {
         for (Order order : orders) {
-            if (order.getOrderId() == orderId) {
+            if (order.getOrderId().equals(orderId)) {
                 if (updatedOrder.getFirstName() == null || updatedOrder.getFirstName().isEmpty()) {
                     return new ResponseEntity<>("first name type is mandatory", HttpStatus.BAD_REQUEST);
                 }
@@ -73,7 +74,7 @@ public class OrderController {
                     return new ResponseEntity<>("first name type is mandatory", HttpStatus.BAD_REQUEST);
                 }
                 Optional<Order> existingOrderOptional = orders.stream()
-                        .filter(pizza -> pizza.getOrderId() == orderId)
+                        .filter(pizza -> pizza.getOrderId().equals(orderId))
                         .findFirst();
                 if (existingOrderOptional.isPresent()) {
                     Order existingOrder = existingOrderOptional.get();
@@ -99,6 +100,6 @@ public class OrderController {
      */
     @DeleteMapping("/{orderId}")
     public void deleteOrder(@PathVariable int orderId) {
-        orders.removeIf(order -> order.getOrderId() == orderId);
+        orders.removeIf(order -> order.getOrderId().equals(orderId));
     }
 }

@@ -2,6 +2,7 @@ package ex4src.form;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Order {
     private static final AtomicInteger count = new AtomicInteger(0);
-    private int orderId;
+    private UUID orderId;
     private String firstName;
     private String lastName;
     private Address address;
@@ -23,7 +24,7 @@ public class Order {
      * Default constructor that initializes the order with a unique ID.
      */
     public Order() {
-        this.orderId = count.incrementAndGet();
+        this.orderId = UUID.randomUUID();
     }
     /**
      * Constructs an {@code Order} with the specified details and adds it to the list of orders.
@@ -49,7 +50,7 @@ public class Order {
      *
      * @return the order ID
      */
-    public int getOrderId() {
+    public UUID getOrderId() {
         return orderId;
     }
 
@@ -59,14 +60,15 @@ public class Order {
      * @param id the order ID
      * @return the order with the specified ID, or {@code null} if no order is found
      */
-    public static Order getOrderById(int id) {
+    public static Order getOrderById(UUID id) {
         for (Order order : orders) {
-            if (order.getOrderId() == id) {
+            if (order.getOrderId().equals(id)) {
                 return order;
             }
         }
         return null;
     }
+
     /**
      * Returns the first name of the customer.
      *
